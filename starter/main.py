@@ -5,8 +5,11 @@ from pydantic import BaseModel, Field
 import pickle
 import pandas as pd
 
-from starter.ml.model import inference
-from starter.ml.data import process_data
+import sys
+sys.path.append('./starter/starter/ml')
+
+from model import inference
+from data import process_data
 
 app = FastAPI()
 

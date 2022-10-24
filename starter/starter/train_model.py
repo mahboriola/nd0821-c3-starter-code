@@ -6,8 +6,11 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 import pickle
 
-from ml.data import process_data
-from ml.model import train_model, inference, compute_model_metrics
+import sys
+sys.path.append('./starter/starter/ml')
+
+from data import process_data
+from model import train_model, inference, compute_model_metrics
 
 # Add code to load in the data.
 data = pd.read_csv('starter/data/census.csv')

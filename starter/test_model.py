@@ -4,8 +4,11 @@ import pickle
 from sklearn.model_selection import train_test_split
 import xgboost as xgb
 
-from starter.ml.data import process_data
-from starter.ml.model import train_model, inference, compute_model_metrics
+import sys
+sys.path.append('./starter/starter/ml')
+
+from data import process_data
+from model import train_model, inference, compute_model_metrics
 
 data = pd.read_csv('starter/data/census.csv')
 
