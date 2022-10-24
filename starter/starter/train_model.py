@@ -38,5 +38,9 @@ X_test, y_test, _, _ = process_data(
 # Train and save a model.
 model = train_model(X_train, y_train)
 
-with open('starter/model/model.pkl', 'wb') as f:
-    pickle.dump(model, f)
+with open('starter/model/model.pkl', 'wb') as m, \
+     open('starter/model/encoder.pkl', 'wb') as e, \
+     open('starter/model/lb.pkl', 'wb') as l:
+    pickle.dump(model, m)
+    pickle.dump(encoder, e)
+    pickle.dump(lb, l)
