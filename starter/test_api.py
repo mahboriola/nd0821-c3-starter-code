@@ -15,7 +15,7 @@ def test_predict_without_body():
     assert r.status_code != 200
 
 
-def test_predict():
+def test_predict_class_0():
     body = {
         "age": 39,
         "workclass": "State-gov",
@@ -35,3 +35,25 @@ def test_predict():
     r = client.post('/predict', json=body)
     assert r.status_code == 200
     assert r.json()['prediction'] == 0
+
+
+def test_predict_class_1():
+    body = {
+        "age": 31,
+        "workclass": "Private",
+        "fnlgt": 45781,
+        "education": "Masters",
+        "education-num": 14,
+        "marital-status": "Never-married",
+        "occupation": "Prof-specialty",
+        "relationship": "Not-in-family",
+        "race": "White",
+        "sex": "Female",
+        "capital-gain": 14084,
+        "capital-loss": 0,
+        "hours-per-week": 50,
+        "native-country": "United-States"
+    }
+    r = client.post('/predict', json=body)
+    assert r.status_code == 200
+    assert r.json()['prediction'] == 1
