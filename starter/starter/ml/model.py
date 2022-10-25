@@ -1,5 +1,11 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 import xgboost as xgb
+import json
+
+import sys
+sys.path.append('./starter/starter/ml')
+from data import process_data
+
 
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
@@ -51,7 +57,7 @@ def inference(model, X):
 
     Inputs
     ------
-    model : ???
+    model : xgboost.XGBClassifier
         Trained machine learning model.
     X : np.array
         Data used for prediction.
@@ -62,3 +68,42 @@ def inference(model, X):
     """
     y_pred = model.predict(X)
     return y_pred
+
+
+def compute_data_slices_metrics(data, model, encoder, lb):
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+
+    scores = {}
+
+    for feat in cat_features:
+        scores[feat] = {}
+        for feat_value in data[feat].unique():
+            df_temp = data[data[feat] == feat_value]
+            
+            X_test, y_test, _, _ = process_data(
+                df_temp, categorical_features=cat_features,
+                label="salary", training=False,
+                encoder=encoder, lb=lb
+            )
+
+            y_pred = inference(model, X_test)
+
+            precision, recall, fbeta = compute_model_metrics(y_test, y_pred)
+            
+            scores[feat][feat_value] = {
+                'precision': round(precision, ndigits=3), 
+                'recall': round(recall, ndigits=3),
+                'fbeta': round(fbeta, ndigits=3)
+            }
+    
+    with open('starter/screenshots/slices_scores.json', 'w') as f:
+        json.dump(scores, f, indent=4)
