@@ -1,4 +1,3 @@
-import pytest
 import pandas as pd
 import pickle
 from sklearn.model_selection import train_test_split
@@ -36,17 +35,21 @@ X_test, y_test, _, _ = process_data(
 with open('starter/model/model.pkl', 'rb') as f:
     model = pickle.load(f)
 
+
 def test_train_model():
     trained_model = train_model(X_train, y_train)
     assert isinstance(trained_model, xgb.XGBClassifier)
+
 
 def test_inference():
     y_pred = inference(model, X_test)
     assert y_pred.shape == y_test.shape
 
+
 def test_compute_model_metrics():
     precision, recall, fbeta = compute_model_metrics(y_test, y_test)
     assert precision == 1 and recall == 1 and fbeta == 1
+
 
 test_train_model()
 test_inference()

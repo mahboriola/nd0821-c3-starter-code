@@ -10,7 +10,7 @@ import sys
 sys.path.append('./starter/starter/ml')
 
 from data import process_data
-from model import train_model, inference, compute_model_metrics
+from model import train_model
 
 # Add code to load in the data.
 data = pd.read_csv('starter/data/census.csv')
@@ -41,9 +41,9 @@ X_test, y_test, _, _ = process_data(
 # Train and save a model.
 model = train_model(X_train, y_train)
 
-with open('starter/model/model.pkl', 'wb') as m, \
-     open('starter/model/encoder.pkl', 'wb') as e, \
-     open('starter/model/lb.pkl', 'wb') as l:
-    pickle.dump(model, m)
-    pickle.dump(encoder, e)
-    pickle.dump(lb, l)
+with open('starter/model/model.pkl', 'wb') as model_file, \
+     open('starter/model/encoder.pkl', 'wb') as encoder_file, \
+     open('starter/model/lb.pkl', 'wb') as lb_file:
+    pickle.dump(model, model_file)
+    pickle.dump(encoder, encoder_file)
+    pickle.dump(lb, lb_file)

@@ -4,6 +4,7 @@ from main import app
 
 client = TestClient(app)
 
+
 def test_hello_message():
     r = client.get('/')
     assert r.status_code == 200

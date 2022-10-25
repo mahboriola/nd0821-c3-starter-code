@@ -88,7 +88,7 @@ def compute_data_slices_metrics(data, model, encoder, lb):
         scores[feat] = {}
         for feat_value in data[feat].unique():
             df_temp = data[data[feat] == feat_value]
-            
+
             X_test, y_test, _, _ = process_data(
                 df_temp, categorical_features=cat_features,
                 label="salary", training=False,
@@ -98,12 +98,12 @@ def compute_data_slices_metrics(data, model, encoder, lb):
             y_pred = inference(model, X_test)
 
             precision, recall, fbeta = compute_model_metrics(y_test, y_pred)
-            
+
             scores[feat][feat_value] = {
-                'precision': round(precision, ndigits=3), 
+                'precision': round(precision, ndigits=3),
                 'recall': round(recall, ndigits=3),
                 'fbeta': round(fbeta, ndigits=3)
             }
-    
+
     with open('starter/screenshots/slices_scores.json', 'w') as f:
         json.dump(scores, f, indent=4)

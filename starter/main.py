@@ -1,5 +1,3 @@
-# Put the code for your API here.
-from doctest import Example
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 import pickle
@@ -24,6 +22,7 @@ cat_features = [
     "native-country",
 ]
 
+
 class Data(BaseModel):
     age: int
     workclass: str
@@ -43,45 +42,47 @@ class Data(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                    "age": 39,
-                    "workclass": "State-gov",
-                    "fnlgt": 77516,
-                    "education": "Bachelors",
-                    "education-num": 13,
-                    "marital-status": "Never-married",
-                    "occupation": "Adm-clerical",
-                    "relationship": "Not-in-family",
-                    "race": "White",
-                    "sex": "Male",
-                    "capital-gain": 2174,
-                    "capital-loss": 0,
-                    "hours-per-week": 40,
-                    "native-country": "United-States"
+                "age": 39,
+                "workclass": "State-gov",
+                "fnlgt": 77516,
+                "education": "Bachelors",
+                "education-num": 13,
+                "marital-status": "Never-married",
+                "occupation": "Adm-clerical",
+                "relationship": "Not-in-family",
+                "race": "White",
+                "sex": "Male",
+                "capital-gain": 2174,
+                "capital-loss": 0,
+                "hours-per-week": 40,
+                "native-country": "United-States"
             }
         }
 
-with open('starter/model/model.pkl', 'rb') as m, \
-     open('starter/model/encoder.pkl', 'rb') as e, \
-     open('starter/model/lb.pkl', 'rb') as l:
-    model = pickle.load(m)
-    encoder = pickle.load(e)
-    lb = pickle.load(l)
+
+with open('starter/model/model.pkl', 'rb') as model_file, \
+     open('starter/model/encoder.pkl', 'rb') as encoder_file, \
+     open('starter/model/lb.pkl', 'rb') as lb_file:
+    model = pickle.load(model_file)
+    encoder = pickle.load(encoder_file)
+    lb = pickle.load(lb_file)
+
 
 @app.get('/')
 async def hello_message():
     return {'msg': 'Hello! Welcome to my deploy project!'}
 
+
 @app.post('/predict')
-async def predict_data(data: Data): 
+async def predict_data(data: Data):
     data = pd.DataFrame(data.dict(), index=[0])
-    
+
     data.columns = [col_name.replace('_', '-') for col_name in data.columns]
-    
+
     data, _, _, _ = process_data(
         data, categorical_features=cat_features, label=None, training=False,
         encoder=encoder, lb=lb
     )
-    
+
     preds = inference(model, data)
     return {'prediction': int(preds[0])}
-
