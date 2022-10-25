@@ -105,5 +105,4 @@ def compute_data_slices_metrics(data, model, encoder, lb):
                 'fbeta': round(fbeta, ndigits=3)
             }
 
-    with open('starter/screenshots/slices_scores.json', 'w') as f:
-        json.dump(scores, f, indent=4)
+    return scores
